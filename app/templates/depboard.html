@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+    <html>
+        <head>
+            <link rel="stylesheet" href="../../static/styling.css">
+            <title>{{ station }} Board</title>
+        </head>
+        <body>
+            <h1>Departures from {{ station }}</h1>
+            <table style="width:100%">
+            <tr>
+                <th>Dep.</th>
+                <th>Dest.</th>
+                <th>Exp. dep.</th>
+                <th>pl.</th>
+                <th>Operator</th>
+            </tr>
+            {% for train in trains %}
+                <tr>
+                <td>{{ train.booked_dep }}</td>
+                <td>{{ train.dest_str }}</td> 
+                <td>{{ train.exp_dep }}</td>
+                <td>{{ train.platform }}</td>
+                <td>{{ train.operator }}</td>
+                </tr>
+            {% endfor %}
+            </table>
+        </body>
+    </html>
+
+    

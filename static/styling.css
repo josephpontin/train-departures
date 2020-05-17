@@ -1,0 +1,25 @@
+body {
+    background-color: lightblue;
+    
+  }
+
+
+  
+h1 {
+    color: navy;
+    margin-left: 20px;
+  }
+
+/* 
+@font-face {
+    font-family: 'railwayregular';
+    src: url('Railway-webfont.eot');
+    src: url('Railway-webfont.eot?#iefix') format('embedded-opentype'),
+         url('Railway-webfont.woff2') format('woff2'),
+         url('Railway-webfont.woff') format('woff'),
+         url('Railway-webfont.ttf') format('truetype'),
+         url('Railway-webfont.svg#railwayregular') format('svg');
+    font-weight: normal;
+    font-style: normal;
+
+} */
