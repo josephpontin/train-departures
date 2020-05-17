@@ -22,6 +22,9 @@ def posts(station=None):
 
     trains = []
 
+    if not services:
+        return render_template('error.html')
+
     for service in services:
         train = {}
         try:
