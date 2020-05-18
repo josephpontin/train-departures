@@ -1,10 +1,6 @@
-<!DOCTYPE html>
-    <html>
-        <head>
-            <link rel="stylesheet" href="../../static/styling.css">
-            <title>{{ station }} Board</title>
-        </head>
-        <body>
+{% extends "base.html" %}
+
+{% block content %}
             <h1>Departures from {{ station }}</h1>
             <table style="width:100%">
             <tr>
@@ -24,7 +20,6 @@
                 </tr>
             {% endfor %}
             </table>
-        </body>
-    </html>
+{% endblock %}
 
     

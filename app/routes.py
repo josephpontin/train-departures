@@ -8,7 +8,7 @@ from app import app
 
 @app.route('/')
 def home():
-    return 'This is a website to show upcoming departure from a station. To for a station got to /dep/<Station Code> e.g. for Dunton Green go to /dep/DNG'
+    return render_template('home.html')
 
 @app.route('/dep')
 @app.route('/dep/<station>')
