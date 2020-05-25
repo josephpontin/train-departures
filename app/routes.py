@@ -72,14 +72,15 @@ def posts(station=None):
         return render_template('depboard.html', station=name, trains=trains)
 
 
-    # Check if input looks like 3 letter station code
+    # Check if input looks like station code
     if re.search("^[A-Za-z]*$", station):
         # If it does, give it a go
         r = requests.get(f'http://api.rtt.io/api/v1/json/search/{station}', auth=(os.environ.get('rtt_uname'), os.environ.get('rtt_pword')))
-        
+        print(r, file=sys.stderr)
         # If no error return the results
-        if 'error' not in r.json():
-            return get_results(station, r)
+        if r.status_code==200:
+            if 'error' not in r.json():
+                return get_results(station, r)
 
     # Check if input looks like station name
     if re.search("^[A-Za-z\s]*$", station):
@@ -97,7 +98,7 @@ def posts(station=None):
                 possible_matches.append(possible_match)
         if len(possible_matches) == 0:
             return render_template('search.html')
-            
+
         # if len(possible_matches) > 20:
         #     # Placeholder, return error about too many matches
         #     return render_template('error.html')
