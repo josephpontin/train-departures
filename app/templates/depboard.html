@@ -2,24 +2,28 @@
 
 {% block content %}
             <h1>Departures from {{ station }}</h1>
-            <table style="width:100%">
-            <tr>
-                <th>Dep.</th>
-                <th>Dest.</th>
-                <th>Exp. dep.</th>
-                <th>pl.</th>
-                <th>Operator</th>
-            </tr>
-            {% for train in trains %}
+            {% if trains != None %}
+                <table style="width:100%">
                 <tr>
-                <td>{{ train.booked_dep }}</td>
-                <td>{{ train.dest_str }}</td> 
-                <td>{{ train.exp_dep }}</td>
-                <td>{{ train.platform }}</td>
-                <td>{{ train.operator }}</td>
+                    <th>Dep.</th>
+                    <th>Dest.</th>
+                    <th>Exp. dep.</th>
+                    <th>pl.</th>
+                    <th>Operator</th>
                 </tr>
-            {% endfor %}
-            </table>
+                {% for train in trains %}
+                    <tr>
+                    <td>{{ train.booked_dep }}</td>
+                    <td>{{ train.dest_str }}</td> 
+                    <td>{{ train.exp_dep }}</td>
+                    <td>{{ train.platform }}</td>
+                    <td>{{ train.operator }}</td>
+                    </tr>
+                {% endfor %}
+                </table>
+            {% else %}
+                <h2>There are no upcoming departures from this location.</h2>
+            {% endif %}
 {% endblock %}
 
     
