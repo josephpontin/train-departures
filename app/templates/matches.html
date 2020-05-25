@@ -1,0 +1,12 @@
+{% extends "base.html" %}
+
+{% block content %}
+            <h1>We found several locations matching your search</h1>
+
+            {% for match in matches %}
+                <a href="/dep/{{match.code}}"><h5>{{ match.description }} </h5></a>
+            {% endfor %}
+
+{% endblock %}
+
+    
