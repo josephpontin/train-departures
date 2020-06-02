@@ -1,0 +1,39 @@
+{% extends "base.html" %}
+
+{% block content %}
+            <h1>{{ train_header }}</h1>
+                <table style="width:100%">
+                <tr>
+                    <th>Location</th>
+                    <th>Sched. Arr.</th>
+                    <th>Sched. Dep.</th>
+                    <th>RT Arr.</th>
+                    <th>RT Dep.</th>
+                </tr>
+                {% for calling_point in calling_points %}
+                    <tr>
+                    <td>{{ calling_point.location_desc }}</td>
+                    <td>{{ calling_point.booked_arr }}</td> 
+                    <td>{{ calling_point.booked_dep }}</td>
+                    <td>
+                        {% if calling_point.arr_act == True %}
+                        <b>{{ calling_point.expected_arr }}</b>
+                        {% else %}
+                        {{ calling_point.expected_arr }}
+                        {% endif %}
+                    </td>
+                    <td>
+                        {% if calling_point.dep_act == True %}
+                        <b>{{ calling_point.expected_dep }}</b>
+                        {% else %}
+                        {{ calling_point.expected_dep }}
+                        {% endif %}
+                    </td>
+                    </tr>
+                {% endfor %}
+                </table>
+
+
+{% endblock %}
+
+    

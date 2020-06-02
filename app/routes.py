@@ -66,45 +66,16 @@ def posts(station=None):
 
             train['platform'] = platform
             train['operator'] = service['atocName']
+            train['UID'] = service['serviceUid']
+            rundate = service['runDate'].split('-')
+            
+            train['year'] = rundate[0]
+            train['month'] = rundate[1]
+            train['day'] = rundate[2]
 
             trains.append(train)
+        print(trains, file=sys.stderr)
         return render_template('depboard.html', station=name, trains=trains)
-
-
-    # # Check if input looks like station code
-    # if re.search("^[A-Za-z]*$", station):
-    #     # If it does, give it a go
-    #     r = requests.get(f'http://api.rtt.io/api/v1/json/search/{station}', auth=(os.environ.get('rtt_uname'), os.environ.get('rtt_pword')))
-    #     print(r, file=sys.stderr)
-    #     # If no error return the results
-    #     if r.status_code==200:
-    #         if 'error' not in r.json():
-    #             return get_results(station, r)
-
-    # # Check if input looks like station name
-    # if re.search("^[A-Za-z\s]*$", station):
-        
-    #     # Check if exact match
-    #     possible_matches = []
-    #     for key in setup.location_dict:
-    #         if re.search(f'^({station})$', key, re.IGNORECASE):
-    #             print(setup.location_dict[key], file=sys.stderr)
-    #             return get_results(setup.location_dict[key])
-    #         if re.search(f'.*({station}).*', key, re.IGNORECASE):
-    #             possible_match={}
-    #             possible_match['code'] = setup.location_dict[key]
-    #             possible_match['description'] = key.title()
-    #             possible_matches.append(possible_match)
-    #     if len(possible_matches) == 0:
-    #         return render_template('search.html')
-
-    #     # if len(possible_matches) > 20:
-    #     #     # Placeholder, return error about too many matches
-    #     #     return render_template('error.html')
-    #     else:
-    #         possible_matches = sorted(possible_matches, key=lambda k: k['description'])
-    #         return render_template('matches.html', matches = possible_matches)
-    #     return render_template('search.html')
 
     # return render_template('search.html')
 
@@ -146,3 +117,45 @@ def search_post():
     code = request.form['Station']
 
     return posts(station=code)
+
+
+@app.route('/train')
+@app.route('/train/<train_id>/<year>/<month>/<day>')
+def train(train_id=None, year=None, month=None, day=None):
+    r = requests.get(f'http://api.rtt.io/api/v1/json/service/{train_id}/{year}/{month}/{day}', auth=(os.environ.get('rtt_uname'), os.environ.get('rtt_pword')))
+    result = r.json()
+    identity = result['trainIdentity']
+    origins = []
+    destinations = []
+
+    for origin in result['origin']:
+        origins.append(origin['publicTime'] + ' ' + origin['description'])
+
+    origins_str = ' & '.join(origins)
+
+    for destination in result['destination']:
+        destinations.append(destination['description'] + ' ' + destination['publicTime'])
+
+    destinations_str = ' & '.join(destinations)
+
+    train_header = f'{identity} {origins_str} to {destinations_str}'
+
+    calling_points = []
+
+    for location in result['locations']:
+        calling_point = {}
+        calling_point['location_desc'] = location['description']
+        calling_point['tiploc'] = location['tiploc']
+        calling_point['booked_arr'] = location['gbttBookedArrival'] if 'gbttBookedArrival' in location.keys() else ''
+        calling_point['booked_dep'] = location['gbttBookedDeparture'] if 'gbttBookedDeparture' in location.keys() else ''
+        calling_point['expected_arr'] = location['realtimeArrival'] if 'realtimeArrival' in location.keys() else ''
+        calling_point['expected_dep'] = location['realtimeDeparture'] if 'realtimeDeparture' in location.keys() else ''
+        calling_point['arr_act'] = location['realtimeArrivalActual'] if 'realtimeArrivalActual' in location.keys() else 'false'
+        calling_point['dep_act'] = location['realtimeDepartureActual'] if 'realtimeDepartureActual' in location.keys() else 'false'
+        calling_points.append(calling_point)
+
+
+
+    return render_template('train.html', train_header=train_header, calling_points=calling_points)
+
+    

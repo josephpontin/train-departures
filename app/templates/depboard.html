@@ -10,6 +10,7 @@
                     <th>Exp. dep.</th>
                     <th>pl.</th>
                     <th>Operator</th>
+                    <th>Details</th>
                 </tr>
                 {% for train in trains %}
                     <tr>
@@ -18,6 +19,7 @@
                     <td>{{ train.exp_dep }}</td>
                     <td>{{ train.platform }}</td>
                     <td>{{ train.operator }}</td>
+                    <td> <a href="/train/{{train.UID}}/{{train.year}}/{{train.month}}/{{train.day}}"> Details</a> </td>
                     </tr>
                 {% endfor %}
                 </table>
